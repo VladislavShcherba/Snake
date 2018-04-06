@@ -1,13 +1,15 @@
 package cell;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import draw.Drawable;
 import exception.DirectionChangeException;
 import util.Direction;
 
 
-public class Snake {
+public class Snake implements Drawable {
 	
 	private List<SnakeCell> snakeList;
 	
@@ -18,41 +20,42 @@ public class Snake {
 	}
 	
 	public void growUp() {
-		
-		int oldHeadX = snakeList.get( snakeList.size()-1 ).getX();
-		int oldHeadY = snakeList.get( snakeList.size()-1 ).getY();
-		Direction oldHeadDirection = snakeList.get( snakeList.size()-1 ).getDirection();
-		
-		int newHeadX = oldHeadX;
-		int newHeadY = oldHeadY;
-		switch(oldHeadDirection) {
-		case DOWN:
-			newHeadY += 1;
-			break;
-		case LEFT:
-			newHeadX -= 1;
-			break;
-		case RIGHT:
-			newHeadX += 1;
-			break;
-		case UP:
-			newHeadY -= 1;
-			break;
-		default:
-			break;
-		}
-		
-		SnakeCell newHead = new SnakeCell( newHeadX, newHeadY, oldHeadDirection, true );
-		snakeList.get( snakeList.size()-1 ).setHead( false );
+		SnakeCell newHead = new SnakeCell( snakeList.get(snakeList.size()-1) );
+		snakeList.get( snakeList.size()-1 ).setHead(false);
+		newHead.move();
 		snakeList.add( newHead );
 	}
 	
-	public void changeDirection( Direction direction ) throws DirectionChangeException {
-		
+	public void changeDirection( Direction direction ) throws DirectionChangeException {	
 		if ( snakeList.get( snakeList.size()-1 ).getDirection().getOpposite() == direction ) {
 			throw new DirectionChangeException();
 		} else {
 			snakeList.get( snakeList.size()-1 ).setDirection( direction );
+		}
+	}
+	
+	public boolean move() {
+		Direction oldDirection = snakeList.get( snakeList.size()-1 ).getDirection();
+		for( int i = snakeList.size()-1; i>=0; i-- ) {
+			snakeList.get(i).move();
+			oldDirection = snakeList.get(i).setDirection(oldDirection);
+		}
+		
+		for ( int i=0; i<snakeList.size(); i++ ) {
+			for ( int j=i+1; j<snakeList.size(); j++) {
+				if ( snakeList.get(i).getX()==snakeList.get(j).getX()
+						&& snakeList.get(i).getY()==snakeList.get(j).getY() ) {
+					return true; // intersection occurred
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		for( SnakeCell snakeCell: snakeList ) {
+			snakeCell.draw(g);
 		}
 	}
 }

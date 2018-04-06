@@ -1,13 +1,20 @@
 package cell;
 
-public class Cell {
+import draw.Drawable;
+
+public abstract class Cell implements Drawable{
 	
-	private int x;
-	private int y;
+	protected int x;
+	protected int y;
 	
 	public Cell( int x, int y ) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Cell( Cell cell ) {
+		x = cell.x;
+		y = cell.y;
 	}
 	
 	public int getX() {
@@ -18,11 +25,15 @@ public class Cell {
 		return y;
 	}
 	
-	public void setX( int x ) {
+	public int setX( int x ) {
+		int oldX = this.x;
 		this.x = x;
+		return oldX;
 	}
 	
-	public void setY( int y ) {
+	public int setY( int y ) {
+		int oldY = this.y;
 		this.y = y;
+		return oldY;
 	}
 }

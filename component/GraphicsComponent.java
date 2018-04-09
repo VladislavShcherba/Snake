@@ -1,11 +1,8 @@
 package component;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
@@ -16,10 +13,6 @@ import cell.SnakeCell;
 
 public class GraphicsComponent extends JComponent {
 
-	public static final int DEFAULT_WIDTH = 1900;
-	public static final int DEFAULT_HEIGHT = 1200;
-	public static final int DEFAULT_CELL_SIZE = 10;
-	
 	private static final long serialVersionUID = 1L;
 	
 	@Override

@@ -1,9 +1,11 @@
-package cell;
+package object;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cell.Cell;
+import cell.SnakeCell;
 import draw.Drawable;
 import exception.DirectionChangeException;
 import util.Direction;
@@ -16,6 +18,12 @@ public class Snake implements Drawable {
 	public Snake( int x, int y, Direction direction ) {
 		snakeList = new ArrayList<SnakeCell>();
 		SnakeCell headCell = new SnakeCell( x, y, direction, true );
+		snakeList.add(headCell);
+	}
+	
+	public Snake( Cell cell, Direction direction ) {
+		snakeList = new ArrayList<SnakeCell>();
+		SnakeCell headCell = new SnakeCell( cell, direction, true );
 		snakeList.add(headCell);
 	}
 	
@@ -50,6 +58,10 @@ public class Snake implements Drawable {
 			}
 		}
 		return false;
+	}
+	
+	public Cell headPositionAfterMove() {
+		return snakeList.get( snakeList.size()-1 ).cellPositionAfterMove();
 	}
 
 	@Override

@@ -1,10 +1,15 @@
 package cell;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
+import util.GlobalPreferences;
 import draw.Drawable;
 
-public abstract class Cell implements Drawable {
+public class Cell implements Drawable {
 	
 	protected int x;
 	protected int y;
@@ -58,5 +63,13 @@ public abstract class Cell implements Drawable {
 	@Override
 	public int hashCode() {
 		return Objects.hash( x, y );
+	}
+
+	@Override
+	public void draw( Graphics g ) {
+		Graphics2D g2 = (Graphics2D) g;
+		int size = GlobalPreferences.getCellSize();
+		g2.setColor(Color.BLACK);
+		g2.draw( new Rectangle2D.Float( size*x, size*y, size, size ) );
 	}
 }

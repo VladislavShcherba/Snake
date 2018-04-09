@@ -1,15 +1,53 @@
 package driver;
 
+import java.util.Random;
+
+import cell.Cell;
+import object.Barrier;
+import object.Food;
+import object.Snake;
 import util.Direction;
 import util.GlobalPreferences;
-import cell.Snake;
 
 public class Driver {
+	
 	private Snake snake;
-	private List<>
+	private Barrier barrier;
+	private Food food;
+	private Random random;
 	
 	public Driver() {
-		snake = new Snake( GlobalPreferences.DEFAULT_WIDTH/2,GlobalPreferences.DEFAULT_HEIGHT/2, Direction.RIGHT );
-		
+		barrier = new Barrier();
+		snake = new Snake( getReasonableSnakeInitialPosition(), Direction.RIGHT );
+		food = new Food( getReasonableFoodPosition() );
+		random = new Random();
+	}
+	
+	public boolean handleNextStep() {
+		boolean gameOver = false;
+		if( snake.headPositionAfterMove().equals(food) ) {
+			snake.growUp();
+			food = new Food( getReasonableFoodPosition() );
+		} else {
+			if( barrier.contains(snake.headPositionAfterMove()) ) {
+				gameOver = true;
+			} else {
+				if( snake.move() ) {
+					gameOver = true;
+				}
+			}
+		}
+		return gameOver;
+	}
+	
+	private Cell getReasonableFoodPosition() { // should be changed
+		Cell cell = new Cell( (int) (random.nextDouble()*GlobalPreferences.getWidth()), (int)(random.nextDouble()*GlobalPreferences.getHeight()) );
+		while( barrier.contains(cell) || snake.c) {
+			
+		}
+	}
+	
+	private Cell getReasonableSnakeInitialPosition() { // should be changed
+		return new Cell( 5, 5 );
 	}
 }

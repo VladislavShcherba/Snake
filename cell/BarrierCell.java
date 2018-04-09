@@ -14,7 +14,7 @@ public class BarrierCell extends Cell {
 		super(x, y);
 	}
 	
-	public BarrierCell( BarrierCell cell ) {
+	public BarrierCell( Cell cell ) {
 		super(cell);
 	}
 

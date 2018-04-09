@@ -27,6 +27,18 @@ public class SnakeCell extends Cell {
 		this.head = head;
 	}
 	
+	public SnakeCell( Cell cell, Direction direction ) {
+		super( cell );
+		this.direction = direction;
+		this.head = false;
+	}
+	
+	public SnakeCell( Cell cell, Direction direction, boolean head ) {
+		super( cell );
+		this.direction = direction;
+		this.head = head;
+	}
+	
 	public SnakeCell( SnakeCell cell ) {
 		super(cell);
 		direction = cell.direction;
@@ -34,7 +46,7 @@ public class SnakeCell extends Cell {
 	}
 	
 	public void move() {
-		switch(direction) {
+		switch( direction ) {
 		case DOWN:
 			y += 1;
 			break;
@@ -50,6 +62,27 @@ public class SnakeCell extends Cell {
 		default:
 			break;
 		}
+	}
+	
+	public Cell cellPositionAfterMove() {
+		Cell cell = new Cell( this );
+		switch( direction ) {
+		case DOWN:
+			cell.y += 1;
+			break;
+		case LEFT:
+			cell.x -= 1;
+			break;
+		case RIGHT:
+			cell.x += 1;
+			break;
+		case UP:
+			cell.y -= 1;
+			break;
+		default:
+			break;
+		}
+		return cell;
 	}
 	
 	public Direction getDirection() {

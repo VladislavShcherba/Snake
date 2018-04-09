@@ -1,10 +1,12 @@
-package cell;
+package object;
 
 import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import cell.BarrierCell;
+import cell.Cell;
 import util.GlobalPreferences;
 import draw.Drawable;
 
@@ -32,6 +34,10 @@ public class Barrier implements Drawable {
 				}
 			}
 		}
+	}
+	
+	public boolean contains( Cell cell ) {
+		return barrierSet.contains( cell );
 	}
 	
 	@Override

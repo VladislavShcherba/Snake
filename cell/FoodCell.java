@@ -14,7 +14,7 @@ public class FoodCell extends Cell {
 		super(x, y);
 	}
 	
-	public FoodCell( FoodCell cell ) {
+	public FoodCell( Cell cell ) {
 		super(cell);
 	}
 

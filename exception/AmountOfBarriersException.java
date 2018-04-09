@@ -1,5 +1,5 @@
 package exception;
 
-public class DirectionChangeException extends Exception {
+public class AmountOfBarriersException extends Exception {
 	private static final long serialVersionUID = 1L;
 }

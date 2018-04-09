@@ -1,34 +1,55 @@
 package cell;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import util.GlobalPreferences;
 import draw.Drawable;
 
 public class Barrier implements Drawable {
 
-	private List<BarrierCell> barrierList;
+	private Set<BarrierCell> barrierSet;
 	private Random random;
 	
 	public Barrier() {
-		barrierList = new ArrayList<>( GlobalPreferences.AMOUNT_OF_BARRIERS );
+		barrierSet = new HashSet<>( GlobalPreferences.getAmountOfBarriers() );
 		random = new Random();
-		for( int i=0; i<barrierList.size(); ) {
-			int x = (int) ( GlobalPreferences.DEFAULT_WIDTH * random.nextDouble() );
-			int y = (int) ( GlobalPreferences.DEFAULT_HEIGHT * random.nextDouble() );
-			barrierList.add( new BarrierCell(x,y) );
+
+		int amountOfBarriers = 0;
+		int blockWidth = GlobalPreferences.getWidth() / 4;
+		int blockHeight = GlobalPreferences.getHeight() / 4;
+		while ( true ) {
+			int x = randomX();
+			int y = randomY();
+			for ( int j = y; j < y + blockHeight && j < GlobalPreferences.getHeight(); j++ ) {
+				for ( int i = x; i < x + blockWidth && i < GlobalPreferences.getWidth(); i++ ) {
+					if( bernoulli(0.5) && barrierSet.add(new BarrierCell(i,j))
+							&& ++amountOfBarriers >= GlobalPreferences.getAmountOfBarriers() ) {
+						return;
+					}
+				}
+			}
 		}
-	}
-	
-	private boolean bernoulli( double success ) {
-		return random.nextDouble() < success ? true : false;
 	}
 	
 	@Override
 	public void draw( Graphics g ) {
-		
+		for( BarrierCell cell : barrierSet ) {
+			cell.draw(g);
+		}
+	}
+	
+	private int randomX() {
+		return (int) ( random.nextDouble() * GlobalPreferences.getWidth() );
+	}
+	
+	private int randomY() {
+		return (int) ( random.nextDouble() * GlobalPreferences.getHeight() );
+	}
+	
+	private boolean bernoulli( double success ) {
+		return random.nextDouble() < success ? true : false;
 	}
 }

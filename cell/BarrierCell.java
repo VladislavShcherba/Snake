@@ -21,7 +21,7 @@ public class BarrierCell extends Cell {
 	@Override
 	public void draw( Graphics g ) {
 		Graphics2D g2 = (Graphics2D) g;
-		int size = GlobalPreferences.DEFAULT_CELL_SIZE;
+		int size = GlobalPreferences.getCellSize();
 		int indent = size / 3;
 		g2.setColor(Color.LIGHT_GRAY);
 		g2.fill( new Rectangle2D.Float( size*x+1, size*y+1, size-1, size-1 ) );

@@ -1,8 +1,10 @@
 package cell;
 
+import java.util.Objects;
+
 import draw.Drawable;
 
-public abstract class Cell implements Drawable{
+public abstract class Cell implements Drawable {
 	
 	protected int x;
 	protected int y;
@@ -35,5 +37,26 @@ public abstract class Cell implements Drawable{
 		int oldY = this.y;
 		this.y = y;
 		return oldY;
+	}
+	
+	@Override
+	public boolean equals( Object otherObject ) {
+		if( this == otherObject ) {
+			return true;
+		}
+		if( otherObject == null ) {
+			return false;
+		}
+		if( !(otherObject instanceof Cell) ) {
+			return false;
+		}
+		
+		Cell other = (Cell) otherObject;
+		return x == other.x && y == other.y;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash( x, y );
 	}
 }

@@ -45,7 +45,7 @@ public class Snake implements Drawable {
 			for ( int j=i+1; j<snakeList.size(); j++) {
 				if ( snakeList.get(i).getX()==snakeList.get(j).getX()
 						&& snakeList.get(i).getY()==snakeList.get(j).getY() ) {
-					return true; // intersection occurred
+					return true;
 				}
 			}
 		}
@@ -53,9 +53,9 @@ public class Snake implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw( Graphics g ) {
 		for( SnakeCell snakeCell: snakeList ) {
-			snakeCell.draw(g);
+			snakeCell.draw( g );
 		}
 	}
 }

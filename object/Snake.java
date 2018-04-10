@@ -60,13 +60,26 @@ public class Snake implements Drawable {
 		return false;
 	}
 	
+	public Cell getHeadCell() {
+		return new Cell( snakeList.get(snakeList.size()-1) );
+	}
+	
 	public Cell headPositionAfterMove() {
 		return snakeList.get( snakeList.size()-1 ).cellPositionAfterMove();
+	}
+	
+	public boolean contains( Cell cell ) {
+		for( Cell snakeCell : snakeList ) {
+			if( snakeCell.equals(cell) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public void draw( Graphics g ) {
-		for( SnakeCell snakeCell: snakeList ) {
+		for( SnakeCell snakeCell : snakeList ) {
 			snakeCell.draw( g );
 		}
 	}

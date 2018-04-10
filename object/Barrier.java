@@ -12,12 +12,12 @@ import draw.Drawable;
 
 public class Barrier implements Drawable {
 
-	private Set<BarrierCell> barrierSet;
 	private Random random;
+	private Set<BarrierCell> barrierSet;
 	
 	public Barrier() {
-		barrierSet = new HashSet<>( GlobalPreferences.getAmountOfBarriers() );
 		random = new Random();
+		barrierSet = new HashSet<>( GlobalPreferences.getAmountOfBarriers() );
 
 		int amountOfBarriers = 0;
 		int blockWidth = GlobalPreferences.getWidth() / 4;
@@ -25,11 +25,18 @@ public class Barrier implements Drawable {
 		while ( true ) {
 			int x = randomX();
 			int y = randomY();
-			for ( int j = y; j < y + blockHeight && j < GlobalPreferences.getHeight(); j++ ) {
-				for ( int i = x; i < x + blockWidth && i < GlobalPreferences.getWidth(); i++ ) {
-					if( bernoulli(0.5) && barrierSet.add(new BarrierCell(i,j))
-							&& ++amountOfBarriers >= GlobalPreferences.getAmountOfBarriers() ) {
-						return;
+			for ( int j = y; j < y + blockHeight && j < GlobalPreferences.getHeight(); j+=2 ) {
+				for ( int i = x; i < x + blockWidth && i < GlobalPreferences.getWidth(); i+=2 ) {
+					if( bernoulli(0.5) ) {
+						if( barrierSet.add(new BarrierCell(i,j)) ) {
+							barrierSet.add(new BarrierCell(i+1,j));
+							barrierSet.add(new BarrierCell(i,j+1));
+							barrierSet.add(new BarrierCell(i+1,j+1));
+							amountOfBarriers += 4;
+							if( amountOfBarriers >= GlobalPreferences.getAmountOfBarriers() ) {
+								return;
+							}
+						}
 					}
 				}
 			}
@@ -48,11 +55,11 @@ public class Barrier implements Drawable {
 	}
 	
 	private int randomX() {
-		return (int) ( random.nextDouble() * GlobalPreferences.getWidth() );
+		return ( (int)( random.nextDouble() * GlobalPreferences.getWidth()/2 ) ) * 2;
 	}
 	
 	private int randomY() {
-		return (int) ( random.nextDouble() * GlobalPreferences.getHeight() );
+		return ( (int)( random.nextDouble() * GlobalPreferences.getHeight()/2 ) ) * 2;
 	}
 	
 	private boolean bernoulli( double success ) {

@@ -1,6 +1,7 @@
 package util;
 
-import exception.AmountOfBarriersException;
+import exception.GlobalPreferencesException;
+
 
 public class GlobalPreferences {
 	
@@ -14,9 +15,9 @@ public class GlobalPreferences {
 	
 	private GlobalPreferences() {}
 	
-	public static void set( int width, int height, int cellSize, int amountOfBarriers, int speed ) throws AmountOfBarriersException {
-		if( amountOfBarriers > width*height/2 ) {
-			throw new AmountOfBarriersException();
+	public static void set( int width, int height, int cellSize, int amountOfBarriers, int speed ) throws GlobalPreferencesException {
+		if( amountOfBarriers > width*height/2 || width%4!=0 || height%4!=0 || amountOfBarriers%4!=0 ) {
+			throw new GlobalPreferencesException();
 		}
 		instance.width = width;
 		instance.height = height;

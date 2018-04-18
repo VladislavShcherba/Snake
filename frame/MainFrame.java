@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				JFrame frame = new MainFrame();
-				frame.setTitle("Square");
+				frame.setTitle("Snake");
 	            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	            frame.setVisible(true);
 			}	

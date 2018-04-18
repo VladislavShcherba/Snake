@@ -1,5 +1,6 @@
 package driver;
 
+import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,19 +8,20 @@ import java.util.Random;
 import java.util.Set;
 
 import cell.Cell;
+import cell.FoodCell;
 import cell.SnakeCell;
+import draw.Drawable;
 import object.Barrier;
-import object.Food;
 import object.Snake;
 import util.Direction;
 import util.GlobalPreferences;
 
-public class Driver {
+public class Driver implements Drawable {
 	
 	private Random random;
 	private Snake snake;
 	private Barrier barrier;
-	private Food food;
+	private FoodCell food;
 	private Set<Cell> reachableCells;
 	
 	public Driver() {
@@ -27,14 +29,14 @@ public class Driver {
 		barrier = new Barrier();
 		initSnake();
 		initReachableCells();
-		food = new Food( getReasonableFoodPosition() );
+		food = new FoodCell( getReasonableFoodPosition() );
 	}
 	
 	public boolean handleNextStep() {
 		boolean gameOver = false;
 		if( snake.headPositionAfterMove().equals(food) ) {
 			snake.growUp();
-			food = new Food( getReasonableFoodPosition() );
+			food = new FoodCell( getReasonableFoodPosition() );
 		} else {
 			if( barrier.contains(snake.headPositionAfterMove()) ) {
 				gameOver = true;
@@ -45,6 +47,20 @@ public class Driver {
 			}
 		}
 		return gameOver;
+	}
+	
+	public void changeSnakeDirection( Direction direction ) {
+		if( snake.getDirection().getOpposite() == direction ) {
+			return;
+		} else {
+			snake.changeDirection( direction );
+		}
+	}
+
+	public void draw( Graphics g ) {
+		snake.draw(g);
+		barrier.draw(g);
+		food.draw(g);
 	}
 	
 	private void initSnake() {
@@ -103,7 +119,7 @@ public class Driver {
 		Cell cell;
 		do {
 			cell = new Cell( (int)(random.nextDouble()*GlobalPreferences.getWidth()), (int)(random.nextDouble()*GlobalPreferences.getHeight()) );
-		} while( !reachableCells.contains(cell) || snake.contains(cell) || food.equals(cell) );
+		} while( !reachableCells.contains(cell) || snake.contains(cell) || (food!=null && food.equals(cell)) );
 		return cell;
 	}
 }

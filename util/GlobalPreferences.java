@@ -9,7 +9,7 @@ public class GlobalPreferences {
 	private int height = 60;
 	private int cellSize = 10;
 	private int amountOfBarriers = 480;
-	private int speed = 3;
+	private int speed = 5;
 	
 	private static GlobalPreferences instance = new GlobalPreferences();
 	

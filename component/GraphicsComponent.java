@@ -2,44 +2,93 @@ package component;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.Timer;
 
+import driver.Driver;
 import util.Direction;
-import cell.BarrierCell;
-import cell.FoodCell;
-import cell.SnakeCell;
+import util.GlobalPreferences;
+
 
 public class GraphicsComponent extends JComponent {
 
+	private class DirectionChangeAction extends AbstractAction {
+		
+		private static final long serialVersionUID = 1L;
+		
+		Direction direction;
+		
+		DirectionChangeAction( Direction direction ) {
+			this.direction = direction;
+		}
+		
+		@Override
+		public void actionPerformed( ActionEvent event ) {
+			driver.changeSnakeDirection( direction );
+		}	
+	}
+	
 	private static final long serialVersionUID = 1L;
+
+	private Driver driver;
+	private Timer timer;
+	
+	public GraphicsComponent() {
+		driver = new Driver();
+		timer = new Timer( 1000 / GlobalPreferences.getSpeed(), new ActionListener(){
+			@Override
+			public void actionPerformed( ActionEvent event ) {
+				if( driver.handleNextStep() ) {
+					System.exit(1);
+				} else {
+					repaint();
+				}
+			}
+		});
+		timer.start();
+		initControlKeys();
+	}
 	
 	@Override
 	public void paintComponent( Graphics g ) {
-		Graphics2D g2 = (Graphics2D) g;
-		//g2.setColor(Color.LIGHT_GRAY);
-		/*for( int i=0; i<DEFAULT_WIDTH/DEFAULT_CELL_SIZE; i++ ) {
-			for( int j=0; j<DEFAULT_HEIGHT/DEFAULT_CELL_SIZE; j++ ) {
-				Rectangle2D rectangle = new Rectangle2D.Float(i*DEFAULT_CELL_SIZE, j*DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
-				g2.draw(rectangle);
-				Shape s;
-			}
-		}*/
-		/*g2.setColor(Color.RED);
-		g2.drawRect(5, 5, 10, 10);
-		g2.setColor(Color.BLACK);
-		g2.fillRect(6, 6, 9, 9);*/
-		BarrierCell bs = new BarrierCell(5,5);
-		bs.draw(g2);
-		FoodCell fs = new FoodCell(7,7);
-		fs.draw(g2);
-		SnakeCell sc = new SnakeCell(9,9,Direction.UP,true);
-		sc.draw(g2);
+		driver.draw(g);
 	}
 	
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension( DEFAULT_WIDTH, DEFAULT_HEIGHT ); 
+		return new Dimension( GlobalPreferences.getWidth()*GlobalPreferences.getCellSize(), GlobalPreferences.getHeight()*GlobalPreferences.getCellSize() ); 
+	}
+	
+	private void initControlKeys() {
+		InputMap inputMap = getInputMap( JComponent.WHEN_IN_FOCUSED_WINDOW );
+		inputMap.put( KeyStroke.getKeyStroke("pressed UP"), "pressed UP" );
+		inputMap.put( KeyStroke.getKeyStroke("pressed DOWN"), "pressed DOWN" );
+		inputMap.put( KeyStroke.getKeyStroke("pressed RIGHT"), "pressed RIGHT" );
+		inputMap.put( KeyStroke.getKeyStroke("pressed LEFT"), "pressed LEFT" );
+		inputMap.put( KeyStroke.getKeyStroke("pressed PAUSE"), "pressed PAUSE" );
+		
+		ActionMap actionMap = getActionMap();
+		actionMap.put( "pressed UP", new DirectionChangeAction(Direction.UP) );
+		actionMap.put( "pressed DOWN", new DirectionChangeAction(Direction.DOWN) );
+		actionMap.put( "pressed RIGHT", new DirectionChangeAction(Direction.RIGHT) );
+		actionMap.put( "pressed LEFT", new DirectionChangeAction(Direction.LEFT) );
+		actionMap.put( "pressed PAUSE", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed( ActionEvent event ) {
+				if( timer.isRunning() ) {
+					timer.stop();
+				} else {
+					timer.start();
+				}
+			}
+		});
 	}
 }

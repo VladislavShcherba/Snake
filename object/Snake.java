@@ -7,7 +7,6 @@ import java.util.List;
 import cell.Cell;
 import cell.SnakeCell;
 import draw.Drawable;
-import exception.DirectionChangeException;
 import util.Direction;
 
 
@@ -34,12 +33,8 @@ public class Snake implements Drawable {
 		snakeList.add( newHead );
 	}
 	
-	public void changeDirection( Direction direction ) throws DirectionChangeException {	
-		if ( snakeList.get( snakeList.size()-1 ).getDirection().getOpposite() == direction ) {
-			throw new DirectionChangeException();
-		} else {
+	public void changeDirection( Direction direction ) {	
 			snakeList.get( snakeList.size()-1 ).setDirection( direction );
-		}
 	}
 	
 	public boolean move() {
@@ -66,6 +61,10 @@ public class Snake implements Drawable {
 	
 	public Cell headPositionAfterMove() {
 		return snakeList.get( snakeList.size()-1 ).cellPositionAfterMove();
+	}
+	
+	public Direction getDirection() {
+		return snakeList.get( snakeList.size()-1 ).getDirection();
 	}
 	
 	public boolean contains( Cell cell ) {

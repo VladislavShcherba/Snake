@@ -8,8 +8,8 @@ public class GlobalPreferences {
 	private int width = 80;
 	private int height = 60;
 	private int cellSize = 10;
-	private int amountOfBarriers = 480;
-	private int speed = 5;
+	private int amountOfBarriers = 480*9;
+	private int speed = 1;
 	
 	private static GlobalPreferences instance = new GlobalPreferences();
 	
